@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Container,
   Box,
@@ -9,10 +9,32 @@ import {
   Grid,
   FormControlLabel,
   Switch,
+  Alert,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { login } from "../../api";
 import "./SignIn.css";
 
 const Signin = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setError(null);
+
+    try {
+      const data = await login(email, password);
+      console.log(data);
+      navigate("/"); 
+    } catch (error) {
+      setError(error.error || "An error occurred. Please try again.");
+    }
+  };
+
   return (
     <Container
       component="main"
@@ -39,10 +61,14 @@ const Signin = () => {
       >
         <Typography component="h1" variant="h5" className="title">
           <div className="blue-square"></div>
-          Sign in
+          Sign In
         </Typography>
-        <Box sx={{ display: "flex", gap: 1, mt: 2 }}></Box>
-        <Box component="form" noValidate sx={{ mt: 1, width: "100%" }}>
+        {error && (
+          <Alert severity="error" sx={{ width: "100%", mt: 2 }}>
+            {error}
+          </Alert>
+        )}
+        <Box component="form" noValidate sx={{ mt: 1, width: "100%" }} onSubmit={handleSubmit}>
           <TextField
             margin="normal"
             required
@@ -52,6 +78,8 @@ const Signin = () => {
             name="email"
             autoComplete="email"
             autoFocus
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <TextField
             margin="normal"
@@ -62,10 +90,14 @@ const Signin = () => {
             type="password"
             id="password"
             autoComplete="current-password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
           <FormControlLabel
             control={
               <Switch
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
                 sx={{
                   "& .Mui-checked": {
                     color: "#1976d2",
@@ -85,12 +117,12 @@ const Signin = () => {
           </Button>
           <Grid container>
             <Grid item>
-              <Grid href="#" variant="body2">
+              <Typography variant="body2">
                 {"Don't have an account? "}
                 <Link href="#" variant="body2">
                   Sign Up
                 </Link>
-              </Grid>
+              </Typography>
             </Grid>
           </Grid>
         </Box>
