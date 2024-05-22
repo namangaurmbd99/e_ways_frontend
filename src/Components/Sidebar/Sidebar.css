@@ -1,0 +1,26 @@
+.sidebar {
+  position: relative;
+}
+
+.toggle-button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 10;
+}
+
+.drawer.open {
+  width: 240px;
+}
+
+.drawer.closed {
+  width: 60px;
+}
+
+.list-item-text {
+  display: none;
+}
+
+.drawer.open .list-item-text {
+  display: block;
+}
