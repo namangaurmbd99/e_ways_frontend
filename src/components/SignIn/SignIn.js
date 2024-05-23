@@ -12,27 +12,45 @@ import {
   Alert,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { login } from "../../api";
-import "./SignIn.css";
+import { post } from "services/api";
+import "components/SignIn/SignIn.css";
 
 const Signin = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+    rememberMe: false,
+  });
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData({
+      ...formData,
+      [name]: type === "checkbox" ? checked : value,
+    });
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError(null);
 
-    try {
-      const data = await login(email, password);
-      console.log(data);
-      navigate("/"); 
-    } catch (error) {
-      setError(error.error || "An error occurred. Please try again.");
-    }
+    const { username, password } = formData;
+    const signinCredentials = { username, password };
+    post("/sessions", signinCredentials)
+      .then((response) => {
+        const { token } = response.data;
+        localStorage.setItem(
+          "current_user",
+          JSON.stringify({ auth_token: token })
+        );
+        navigate("/");
+      })
+      .catch((error) => {
+        setError(error.error || "An error occurred. Please try again.");
+        console.log("Error while login: ", error);
+      });
   };
 
   return (
@@ -68,18 +86,23 @@ const Signin = () => {
             {error}
           </Alert>
         )}
-        <Box component="form" noValidate sx={{ mt: 1, width: "100%" }} onSubmit={handleSubmit}>
+        <Box
+          component="form"
+          noValidate
+          sx={{ mt: 1, width: "100%" }}
+          onSubmit={handleSubmit}
+        >
           <TextField
             margin="normal"
             required
             fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
+            id="username"
+            label="Username"
+            name="username"
+            autoComplete="username"
             autoFocus
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={formData.username}
+            onChange={handleChange}
           />
           <TextField
             margin="normal"
@@ -89,15 +112,15 @@ const Signin = () => {
             label="Password"
             type="password"
             id="password"
-            autoComplete="current-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={formData.password}
+            onChange={handleChange}
           />
           <FormControlLabel
             control={
               <Switch
-                checked={rememberMe}
-                onChange={(e) => setRememberMe(e.target.checked)}
+                checked={formData.rememberMe}
+                onChange={handleChange}
+                name="rememberMe"
                 sx={{
                   "& .Mui-checked": {
                     color: "#1976d2",
@@ -115,16 +138,6 @@ const Signin = () => {
           >
             Sign In
           </Button>
-          <Grid container>
-            <Grid item>
-              <Typography variant="body2">
-                {"Don't have an account? "}
-                <Link href="#" variant="body2">
-                  Sign Up
-                </Link>
-              </Typography>
-            </Grid>
-          </Grid>
         </Box>
       </Box>
     </Container>
