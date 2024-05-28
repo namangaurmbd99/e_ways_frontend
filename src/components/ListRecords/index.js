@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { useTable } from "react-table";
 import { CircularProgress, Pagination } from "@mui/material";
-import { COLUMNS } from "./columns";
 import { get } from "services/api";
-import "./CarrierList.css";
+import "./index.css";
 
-export default function CarrierLIst() {
+const ListRecords = ({columns, path}) => {
   const [records, setRecords] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(1);
@@ -13,7 +12,7 @@ export default function CarrierLIst() {
 
   const getValueFromSever = (page) => {
     setIsLoading(true);
-    get(`/carriers/?page=${page}`)
+    get(`${path}/?page=${page}`)
       .then((response) => {
         const { carriers, pagination } = response.data;
         const { total_pages } = pagination;
@@ -44,7 +43,7 @@ export default function CarrierLIst() {
   console.log(records);
 
   const tableInstance = useTable({
-    columns: COLUMNS,
+    columns: columns,
     data: records[page] ?? [],
   });
 
@@ -98,4 +97,6 @@ export default function CarrierLIst() {
       )}
     </>
   );
-}
+};
+
+export default ListRecords;
