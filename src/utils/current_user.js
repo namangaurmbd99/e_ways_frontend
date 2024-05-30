@@ -3,7 +3,7 @@ export const auth_token = () => {
   if (currentUserData) {
     currentUserData = JSON.parse(currentUserData);
     if(currentUserData && currentUserData.hasOwnProperty('auth_token')) {
-      auth_token = currentUserData.auth_token;
+      const auth_token = currentUserData.auth_token;
       return auth_token
     }
   }

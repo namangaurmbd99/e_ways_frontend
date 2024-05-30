@@ -1,0 +1,41 @@
+table {
+  margin: 20px auto; /* Center the table horizontally */
+  width: 80%; /* Set the width to 80% of the container */
+  max-width: 1200px; /* Set a maximum width for the table */
+  border: 1px solid #ddd;
+  border-collapse: collapse;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #f4f4f4;
+}
+
+tbody {
+  height: 400px; /* Set fixed height for the tbody */
+  overflow: auto; /* Add scrollbar when the content overflows */
+}
+
+tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+}
