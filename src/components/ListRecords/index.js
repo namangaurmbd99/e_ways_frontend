@@ -1,10 +1,9 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { useTable } from "react-table";
 import { CircularProgress, Pagination } from "@mui/material";
-import { get } from "services/api";
 import "./index.css";
 
-const ListRecords = ({columns, path}) => {
+const ListRecords = ({ columns, makeApiCall }) => {
   const [records, setRecords] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(1);
@@ -12,13 +11,12 @@ const ListRecords = ({columns, path}) => {
 
   const getValueFromSever = (page) => {
     setIsLoading(true);
-    get(`${path}/?page=${page}`)
+    makeApiCall(page)
       .then((response) => {
-        const { carriers, pagination } = response.data;
-        const { total_pages } = pagination;
+        const { data, total_pages } = response;
         setRecords({
           ...records,
-          [page]: carriers,
+          [page]: data,
         });
         setTotalPages(total_pages);
         setIsLoading(false);
@@ -39,8 +37,6 @@ const ListRecords = ({columns, path}) => {
   const handlePageChange = (event, value) => {
     setPage(value);
   };
-
-  console.log(records);
 
   const tableInstance = useTable({
     columns: columns,
