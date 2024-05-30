@@ -2,8 +2,8 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Signin from "components/SignIn/SignIn";
 import Home from "components/Home/Home";
-import CarrierList from "components/Carrier/CarrierLIst/CarrierList";
-import CustomerList from "components/Customers/CustomerList/CustomerList";
+import CarriersList from "components/Carrier/CarriersLIst/CarriersList";
+import CustomersList from "components/Customer/CustomersList/CustomersList";
 
 function App() {
   return (
@@ -12,8 +12,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
         <Route path="/signin" element={<Signin />} />
-        <Route path="/carriers" element={<CarrierList />} />
-        <Route path="/customers" element={<CustomerList />} />
+        <Route path="/carriers" element={<CarriersList />} />
+        <Route path="/customers" element={<CustomersList />} />
       </Routes>
     </Router>
   );

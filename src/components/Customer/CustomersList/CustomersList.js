@@ -3,14 +3,14 @@ import { COLUMNS } from "./columns";
 import ListRecords from "components/ListRecords";
 import { get } from "services/api";
 
-const CarrierList = () => {
+const CustomersList = () => {
   const makeApiCall = async (page) => {
     try {
-      const response = await get(`/carriers?page=${page}`);
-      const { carriers, pagination } = response.data;
+      const response = await get(`/customers?page=${page}`);
+      const { customers, pagination } = response.data;
       const { total_pages } = pagination;
 
-      return { data: carriers, total_pages };
+      return { data: customers, total_pages };
     } catch (error) {
       console.error("There was an error fetching the carriers!", error);
       throw error;
@@ -24,4 +24,4 @@ const CarrierList = () => {
   );
 };
 
-export default CarrierList;
+export default CustomersList;
